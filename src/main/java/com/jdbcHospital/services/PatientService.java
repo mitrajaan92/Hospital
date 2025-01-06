@@ -30,9 +30,6 @@ public class PatientService {
         return patientsDao.login(id,user,pw);
     }
     public void addPatient(){
-        System.out.println("Enter Patient ID: ");
-        int id = scan.nextInt();
-        scan.nextLine();
         System.out.println("Enter Patient first name: ");
         String fName= scan.nextLine();
         System.out.println("Enter Patient last name:");
@@ -46,7 +43,14 @@ public class PatientService {
         String gender = scan.nextLine();
         System.out.println("Enter Patient address: ");
         String address = scan.nextLine();
-        Patients patient = new Patients(id,fName,lName,phone,email,gender, address);
+        System.out.println("Enter the Doctor id:  ");
+        int doc = scan.nextInt();
+        scan.nextLine();
+        System.out.println("Enter your username: ");
+        String user = scan.nextLine();
+        System.out.println("Enter a password: ");
+        String pw = scan.nextLine();
+        Patients patient = new Patients(fName,lName,phone,email,gender, address, user, pw, doc);
         patientsDao.insertPatient(patient);
     }
     public void viewPatient(){
@@ -75,7 +79,7 @@ public class PatientService {
         Patients p = patientsDao.getPatient(id);
         System.out.println(p);
         System.out.println("Which information would you like to update?");
-        System.out.println("1. First Name, 2. Last Name, 3. Phone number, 4. Email, 5. Gender, 6. Address ");
+        System.out.println("1. First Name, 2. Last Name, 3. Phone number, 4. Email, 5. Gender, 6. Address, 7. Status, 8. Doctor id ");
         int choice = scan.nextInt();
         scan.nextLine();
         if (choice == 1) {
@@ -100,11 +104,21 @@ public class PatientService {
             String gender = scan.nextLine();
             p.setGender(gender);
 
-        }else if(choice == 6){
+        }else if(choice == 6) {
             System.out.println("Enter updated address :");
             String address = scan.nextLine();
             scan.nextLine();
             p.setAddress(address);
+        }else if(choice == 7){
+            System.out.println("Enter updated status :");
+            String status = scan.nextLine();
+            scan.nextLine();
+            p.setStatus(status);
+        }else if(choice == 8){
+            System.out.println("Enter updated doctor id :");
+            int doc= scan.nextInt();
+            scan.nextLine();
+            p.setDoc_id(doc);
         }else{
             System.out.println("Invalid choice");
         }

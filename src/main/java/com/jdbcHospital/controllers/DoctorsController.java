@@ -30,9 +30,9 @@ public class DoctorsController {
             System.out.println(" |-------------------------------------------------------------Welcome to Unity Hospital---------------------------------------------------------------------|");
             System.out.println("""
                      |-----------------------------------------------------------------------------------------------------------------------------------------------------|
-                     | 1.View Department 🔍           | 2. Get all Departments 🏬 🏬                                                                                       |
-                     | 3. Create a Doctor Account 🥼️  | 4. View Doctor 🔍  5. Update Doctor ✍️   | 6. Delete Doctor ❌ | 7. Get all Doctors 🥼🥼                         |
-                     |                                                             0. Logout ➡️                                                                              |
+                     | 1.View Department 🔍           |      2. Get all Departments 🏬 🏬      |       3. View all your Patients 😷😷                                     |
+                     | 4. Create a Doctor Account 🥼️  |      5. View Doctor 🔍    |    6. Update Doctor ✍️   |       7. Delete Doctor ❌ |       8. Get all Doctors 🥼🥼  |
+                     |                                                             0. Logout ➡️                                                                            |
                      |-----------------------------------------------------------------------------------------------------------------------------------------------------|
                     """);
             System.out.println("Enter your choice: ");
@@ -46,18 +46,21 @@ public class DoctorsController {
                     departService.getAllDepartments();
                     break;
                 case 3:
-                    doctorService.addDoctor();
+                    doctorService.viewYourPatients();
                     break;
                 case 4:
-                    doctorService.viewDoctor();
+                    doctorService.addDoctor();
                     break;
                 case 5:
-                    doctorService.updateDoctor();
+                    doctorService.viewDoctor();
                     break;
                 case 6:
-                    doctorService.deleteDoctor();
+                    doctorService.updateDoctor();
                     break;
                 case 7:
+                    doctorService.deleteDoctor();
+                    break;
+                case 8:
                     doctorService.getAllDoctors();
                     break;
                 case 0:

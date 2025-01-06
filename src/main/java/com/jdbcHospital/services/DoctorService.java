@@ -3,6 +3,7 @@ package com.jdbcHospital.services;
 import com.jdbcHospital.daos.DoctorsDaoImpl;
 import com.jdbcHospital.exceptions.IdNotFoundException;
 import com.jdbcHospital.models.Doctors;
+import com.jdbcHospital.models.Patients;
 
 import java.util.List;
 import java.util.Scanner;
@@ -24,6 +25,14 @@ public class DoctorService {
         System.out.println("Enter password: ");
         String pw = scan.nextLine();
         return doctorDaoImpl.login(id,user,pw);
+    }
+    public void viewYourPatients(){
+        System.out.println("Enter Doctor id: ");
+        int id= scan.nextInt();
+        List<Patients> patients= doctorDaoImpl.viewAllPatients(id);
+        for(Patients p: patients){
+            System.out.println(p);
+        }
     }
     public void addDoctor(){
         System.out.println("Enter Doctor ID: ");

@@ -8,16 +8,23 @@ public class Patients {
     private String email;
     private String gender;
     private String address;
+    private int doc_id;
+    private String status;
+    private String username;
+    private String password;
 
     public Patients(){}
-    public Patients(int patient_id, String first_name, String last_name, long phone_number, String email, String gender, String address) {
-        this.patient_id = patient_id;
+    public Patients(String first_name, String last_name, long phone_number, String email, String gender, String address, String username, String password, int doc_id) {
+    //    this.patient_id = patient_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.phone_number = phone_number;
         this.email = email;
         this.gender = gender;
         this.address = address;
+        this.username = username;
+        this.password = password;
+        this.doc_id = doc_id;
     }
 
     public int getPatient_id() {
@@ -76,6 +83,38 @@ public class Patients {
         this.address = address;
     }
 
+    public int getDoc_id() {
+        return doc_id;
+    }
+
+    public void setDoc_id(int doc_id) {
+        this.doc_id = doc_id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Patients: {" +
@@ -85,6 +124,9 @@ public class Patients {
                 ", phone_number = " + phone_number +
                 ", email= " + email +
                 ", gender = " + gender +
-                ", address = " + address +"}";
+                ", address = " + address +
+                ", status = " + status+
+                ", doctor id = "+ doc_id+
+                "}";
     }
 }

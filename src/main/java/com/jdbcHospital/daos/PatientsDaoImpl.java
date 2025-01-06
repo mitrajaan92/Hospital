@@ -14,17 +14,19 @@ public class PatientsDaoImpl implements PatientsDao{
     @Override
     public void insertPatient(Patients p) {
         try (Connection con = MySQLConnector.getConnection()) {
-            String query = "insert into patients(patient_id, first_name, last_name, phone_number, email, gender, address) values(?,?,?,?,?,?,?);";
+            String query = "insert into patients(first_name, last_name, phone_number, email, gender, address, username, password, doc_id) values(?,?,?,?,?,?,?,?,?);";
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, p.getPatient_id());
-            ps.setString(2, p.getFirst_name());
-            ps.setString(3, p.getLast_name());
-            ps.setLong(4, p.getPhone_number());
-            ps.setString(5, p.getEmail());
-            ps.setString(6, p.getGender());
-            ps.setString(7, p.getAddress());
+            ps.setString(1, p.getFirst_name());
+            ps.setString(2, p.getLast_name());
+            ps.setLong(3, p.getPhone_number());
+            ps.setString(4, p.getEmail());
+            ps.setString(5, p.getGender());
+            ps.setString(6, p.getAddress());
+            ps.setString(7,p.getUsername());
+            ps.setString(8,p.getPassword());
+            ps.setInt(9,p.getDoc_id());
             ps.executeUpdate();
-            System.out.println("Patient is inserted! ID = " + p.getPatient_id());
+            System.out.println("Patient is inserted!");
         }catch (SQLIntegrityConstraintViolationException e) {
             // Handle duplicate entry error
             System.err.println("Duplicate entry error for username or password: " + e.getMessage());
@@ -36,7 +38,7 @@ public class PatientsDaoImpl implements PatientsDao{
     @Override
     public void updatePatient(Patients p, int id) {
         try(Connection con = MySQLConnector.getConnection()){
-            String query = "update patients set first_name =?, last_name=?, phone_number=?, email=?, gender=?, address=? where patient_id =?;";
+            String query = "update patients set first_name =?, last_name=?, phone_number=?, email=?, gender=?, address=?, status=?, doc_id=? where patient_id =?;";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setString(1, p.getFirst_name());
             ps.setString(2,p.getLast_name());
@@ -44,7 +46,9 @@ public class PatientsDaoImpl implements PatientsDao{
             ps.setString(4, p.getEmail());
             ps.setString(5,p.getGender());
             ps.setString(6,p.getAddress());
-            ps.setInt(7, id);
+            ps.setString(7,p.getStatus());
+            ps.setInt(8,p.getDoc_id());
+            ps.setInt(9, id);
             ps.executeUpdate();
             System.out.println("Patient is updated! ID = "+id);
         }catch(Exception e){
@@ -83,6 +87,8 @@ public class PatientsDaoImpl implements PatientsDao{
                 p.setEmail(rs.getString("email"));
                 p.setGender(rs.getString("gender"));
                 p.setAddress(rs.getString("address"));
+                p.setStatus(rs.getString("status"));
+                p.setDoc_id(rs.getInt("doc_id"));
                 return p;
             }
             else{
@@ -111,6 +117,8 @@ public class PatientsDaoImpl implements PatientsDao{
                 p.setEmail(rs.getString("email"));
                 p.setGender(rs.getString("gender"));
                 p.setAddress(rs.getString("address"));
+                p.setStatus(rs.getString("status"));
+                p.setDoc_id(rs.getInt("doc_id"));
                 listP.add(p);
             }
         }catch(Exception e){
@@ -154,6 +162,8 @@ public class PatientsDaoImpl implements PatientsDao{
                     p.setEmail(rs2.getString("email"));
                     p.setGender(rs2.getString("gender"));
                     p.setAddress(rs2.getString("address"));
+                    p.setStatus(rs.getString("status"));
+                    p.setDoc_id(rs.getInt("doc_id"));
                     patientsList.add(p);
                 }
             }

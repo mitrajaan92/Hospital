@@ -2,6 +2,7 @@ package com.jdbcHospital.daos;
 
 import com.jdbcHospital.exceptions.IdNotFoundException;
 import com.jdbcHospital.models.Doctors;
+import com.jdbcHospital.models.Patients;
 import com.jdbcHospital.util.MySQLConnector;
 
 import java.sql.Connection;
@@ -46,6 +47,7 @@ public class DoctorsDaoImpl implements DoctorsDao {
             ps.setInt(6, doc.getDepart_id());
             ps.setInt(7, id);
             ps.executeUpdate();
+            System.out.println("Doctor is updated! ID: "+doc.getDoctor_id());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -116,9 +118,8 @@ public class DoctorsDaoImpl implements DoctorsDao {
         }
         return docs;
     }
-
+    @Override
     public void printAllIds() {
-        Doctors doc;
         List<Integer> docsIds = new ArrayList<>();
         try (Connection con = MySQLConnector.getConnection()) {
             String query = "select * from doctors;";
@@ -138,7 +139,7 @@ public class DoctorsDaoImpl implements DoctorsDao {
         }
         System.out.println();
     }
-
+    @Override
     public boolean login(int id, String usr, String pw) {
         boolean login = false;
         String username=" ";
@@ -162,5 +163,34 @@ public class DoctorsDaoImpl implements DoctorsDao {
             login = true;
         }
         return login;
+    }
+    @Override
+    public List<Patients> viewAllPatients(int docId){
+        List<Patients> patients = new ArrayList<>();
+        try (Connection con = MySQLConnector.getConnection()) {
+            String query = "select * from patients where doc_id =?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1,docId);
+            ResultSet rs = ps.executeQuery();
+            if(!(rs.next())){
+                System.out.println("No patients has been assigned!");
+            }
+            while (rs.next()) {
+                Patients p = new Patients();
+                p.setPatient_id(rs.getInt("patient_id"));
+                p.setFirst_name(rs.getString("first_name"));
+                p.setLast_name(rs.getString("last_name"));
+                p.setPhone_number(rs.getLong("phone_number"));
+                p.setEmail(rs.getString("email"));
+                p.setGender(rs.getString("gender"));
+                p.setAddress(rs.getString("address"));
+                p.setStatus(rs.getString("status"));
+                p.setDoc_id(rs.getInt("doc_id"));
+                patients.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return patients;
     }
 }

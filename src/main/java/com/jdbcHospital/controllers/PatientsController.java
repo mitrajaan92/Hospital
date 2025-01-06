@@ -15,16 +15,20 @@ public class PatientsController {
         PatientService patientService = new PatientService();
         boolean login = false;
         int attempt = 0;
-        while (!login && attempt < 3){
-            login = patientService.checkLogin();
-            if(!login){
-                System.out.println("Your username or password is wrong! Try again!");
+        try {
+            while (!login && attempt < 3) {
+                login = patientService.checkLogin();
+                if (!login) {
+                    System.out.println("Your username or password is wrong! Try again!");
+                }
+                attempt++;
+                if (attempt == 3) {
+                    System.out.println("Too many attempts, You are locked out!");
+                    exit(0);
+                }
             }
-            attempt++;
-            if(attempt == 3){
-                System.out.println("Too many attempts, You are locked out!");
-                exit(0);
-            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
         while (login) {
             System.out.println();
