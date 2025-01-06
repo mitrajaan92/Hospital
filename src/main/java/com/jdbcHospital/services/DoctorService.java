@@ -15,6 +15,16 @@ public class DoctorService {
         scan = new Scanner(System.in);
         doctorDaoImpl = new DoctorsDaoImpl();
     }
+    public boolean checkLogin(){
+        System.out.println("Enter Your ID: ");
+        int id = scan.nextInt();
+        scan.nextLine();
+        System.out.println("Enter username: ");
+        String user = scan.nextLine();
+        System.out.println("Enter password: ");
+        String pw = scan.nextLine();
+        return doctorDaoImpl.login(id,user,pw);
+    }
     public void addDoctor(){
         System.out.println("Enter Doctor ID: ");
         int id = scan.nextInt();
@@ -36,6 +46,7 @@ public class DoctorService {
         doctorDaoImpl.insertDoctor(doc);
     }
     public void viewDoctor(){
+        doctorDaoImpl.printAllIds();
         System.out.println("Enter Doctor ID: ");
         int id = scan.nextInt();
         Doctors doc = doctorDaoImpl.getDoctorById(id);
@@ -46,11 +57,13 @@ public class DoctorService {
         }
     }
     public void deleteDoctor(){
+        doctorDaoImpl.printAllIds();
         System.out.println("Enter Doctor ID: ");
         int id = scan.nextInt();
         doctorDaoImpl.deleteDoctor(id);
     }
     public void updateDoctor() {
+        doctorDaoImpl.printAllIds();
         System.out.println("Enter Doctor id that you want to update: ");
         int id = scan.nextInt();
         scan.nextLine();

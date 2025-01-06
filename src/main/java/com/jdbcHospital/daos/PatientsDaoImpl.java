@@ -3,7 +3,7 @@ package com.jdbcHospital.daos;
 import com.jdbcHospital.exceptions.IdNotFoundException;
 import com.jdbcHospital.models.Patients;
 import com.jdbcHospital.util.MySQLConnector;
-
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +13,21 @@ import java.util.List;
 public class PatientsDaoImpl implements PatientsDao{
     @Override
     public void insertPatient(Patients p) {
-        try(Connection con = MySQLConnector.getConnection()){
+        try (Connection con = MySQLConnector.getConnection()) {
             String query = "insert into patients(patient_id, first_name, last_name, phone_number, email, gender, address) values(?,?,?,?,?,?,?);";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, p.getPatient_id());
             ps.setString(2, p.getFirst_name());
-            ps.setString(3,p.getLast_name());
-            ps.setLong(4,p.getPhone_number());
+            ps.setString(3, p.getLast_name());
+            ps.setLong(4, p.getPhone_number());
             ps.setString(5, p.getEmail());
-            ps.setString(6,p.getGender());
-            ps.setString(7,p.getAddress());
+            ps.setString(6, p.getGender());
+            ps.setString(7, p.getAddress());
             ps.executeUpdate();
-            System.out.println("Patient is inserted! ID = "+ p.getPatient_id());
+            System.out.println("Patient is inserted! ID = " + p.getPatient_id());
+        }catch (SQLIntegrityConstraintViolationException e) {
+            // Handle duplicate entry error
+            System.err.println("Duplicate entry error for username or password: " + e.getMessage());
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -171,5 +174,49 @@ public class PatientsDaoImpl implements PatientsDao{
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+    }
+    public void printAllPatientsIds() {
+        List<Integer> ids= new ArrayList<>();
+        try(Connection con = MySQLConnector.getConnection()){
+            String query = "select * from patients;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+
+                int id = (rs.getInt("patient_id"));
+                ids.add(id);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println("All available ids: ");
+        for(Integer id: ids){
+            System.out.print(" "+ id);
+        }
+        System.out.println();
+    }
+    public boolean login(int id, String usr, String pw) {
+        boolean login = false;
+        String username=" ";
+        String password =" ";
+        try (Connection con = MySQLConnector.getConnection()) {
+            String query = "select username,password from patients where patient_id =?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                username = (rs.getString("username"));
+                password = (rs.getString("password"));
+
+            } else {
+                throw new IdNotFoundException(id);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        if(usr.equals(username)  && pw.equals(password)){
+            login = true;
+        }
+        return login;
     }
 }

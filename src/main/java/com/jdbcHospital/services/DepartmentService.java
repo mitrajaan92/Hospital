@@ -31,6 +31,7 @@ public class DepartmentService {
         departmentDao.insertDepartment(depart);
     }
     public void viewDepartment(){
+        departmentDao.printAllDepartments();
         System.out.println("Enter the department ID: ");
         int id = scan.nextInt();
         System.out.println("********* Department *********");
@@ -43,6 +44,7 @@ public class DepartmentService {
         }
     }
     public void updateDepartment(){
+        departmentDao.printAllDepartments();
         System.out.println("Enter department id that you want to update: ");
         int id = scan.nextInt();
         scan.nextLine();
@@ -67,6 +69,7 @@ public class DepartmentService {
         departmentDao.updateDepartment(depart, id);
     }
     public void deleteDepartment(){
+        departmentDao.printAllDepartments();
         System.out.println("Enter department id that you want to delete: ");
         int dID = scan.nextInt();
         departmentDao.deleteDepartment(dID);

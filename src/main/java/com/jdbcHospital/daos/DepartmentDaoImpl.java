@@ -103,6 +103,28 @@ public class DepartmentDaoImpl implements DepartmentDao {
         }
         return departments;
     }
+    public void printAllDepartments() {
+        List<Integer> departmentsIds = new ArrayList<>();
+        try(Connection con = MySQLConnector.getConnection()){
+            String query = "select * from Departments;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+
+                int id = (rs.getInt("department_id"));
+
+                departmentsIds.add(id);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Available Ids: ");
+        for(Integer id: departmentsIds){
+            System.out.print(" "+id);
+        }
+        System.out.println();
+    }
 
 
 }

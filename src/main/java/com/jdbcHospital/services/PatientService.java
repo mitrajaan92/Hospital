@@ -1,12 +1,9 @@
 package com.jdbcHospital.services;
 
 import com.jdbcHospital.daos.DepartmentDaoImpl;
-import com.jdbcHospital.daos.DoctorsDaoImpl;
-import com.jdbcHospital.daos.PatientsDao;
 import com.jdbcHospital.daos.PatientsDaoImpl;
 import com.jdbcHospital.exceptions.IdNotFoundException;
 import com.jdbcHospital.models.Departments;
-import com.jdbcHospital.models.Doctors;
 import com.jdbcHospital.models.Patients;
 
 import java.util.List;
@@ -14,13 +11,23 @@ import java.util.Scanner;
 
 public class PatientService {
     private final Scanner scan;
-    private final PatientsDao patientsDao;
+    private final PatientsDaoImpl patientsDao;
     private final DepartmentDaoImpl departmentDao;
 
     public PatientService(){
         scan = new Scanner(System.in);
         patientsDao = new PatientsDaoImpl();
         departmentDao = new DepartmentDaoImpl();
+    }
+    public boolean checkLogin(){
+        System.out.println("Enter Your ID: ");
+        int id = scan.nextInt();
+        scan.nextLine();
+        System.out.println("Enter username: ");
+        String user = scan.nextLine();
+        System.out.println("Enter password: ");
+        String pw = scan.nextLine();
+        return patientsDao.login(id,user,pw);
     }
     public void addPatient(){
         System.out.println("Enter Patient ID: ");
@@ -43,6 +50,7 @@ public class PatientService {
         patientsDao.insertPatient(patient);
     }
     public void viewPatient(){
+        patientsDao.printAllPatientsIds();
         System.out.println("Enter Patient ID: ");
         int id = scan.nextInt();
         Patients p = patientsDao.getPatient(id);
@@ -54,11 +62,13 @@ public class PatientService {
         }
     }
     public void deletePatient(){
+        patientsDao.printAllPatientsIds();
         System.out.println("Enter Patient ID: ");
         int id = scan.nextInt();
         patientsDao.deletePatient(id);
     }
     public void updatePatient() {
+        patientsDao.printAllPatientsIds();
         System.out.println("Enter Patient id that you want to update: ");
         int id = scan.nextInt();
         scan.nextLine();
@@ -109,6 +119,7 @@ public class PatientService {
     }
     public void assignPatientToDepartment(){
         System.out.println("Enter Department id: ");
+        departmentDao.printAllDepartments();
         int dId = scan.nextInt();
         Departments depart = departmentDao.getDepartmentById(dId);
         System.out.println(depart);
@@ -125,6 +136,7 @@ public class PatientService {
     }
     public void showAllAssignedPatientsToDepart(){
         System.out.println("Enter the department id: ");
+        departmentDao.printAllDepartments();
         int dID = scan.nextInt();
         List<Patients> patients = patientsDao.getAllAssignedPatientsToDepartment(dID);
         for(Patients p: patients){
@@ -133,6 +145,7 @@ public class PatientService {
     }
     public void unassignPatientToDepartment(){
         System.out.println("Enter Department id that you would like to unassign to the patient: ");
+        departmentDao.printAllDepartments();
         int dId= scan.nextInt();
         List<Patients> assignedPatients = patientsDao.getAllAssignedPatientsToDepartment(dId);
         for(Patients p: assignedPatients){
